@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MH Retirement Planner</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --blue:#2586F5; --yellow:#F5BD32; --coral:#F07855; --green:#25B889;
+  --rose:#F0A0A8; --ink:#263445; --muted:#718096; --line:#E7ECF1;
+  --bg:#F7F8FA; --card:#FFFFFF; --navy:#173D35;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--navy);color:white;display:grid;place-items:center;font-weight:800}
+.brand h1{font-size:18px;margin:0}.brand small{color:var(--muted);font-size:11px;letter-spacing:.08em}
+.pill{font-size:12px;color:#187B5C;background:#E8F7F1;border-radius:20px;padding:7px 11px;font-weight:650}
+main{max-width:1440px;margin:24px auto;padding:0 20px}
+.intro{margin-bottom:18px}.intro h2{margin:0 0 5px;font-size:23px}.intro p{margin:0;color:var(--muted);font-size:14px}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:18px;align-items:start}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:0 2px 8px rgba(25,42,70,.035)}
+.panel{padding:18px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+.panel h3,.card h3{font-size:14px;margin:0 0 15px;letter-spacing:.035em}
+.section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+.section-title{font-size:12px;font-weight:750;color:#506176;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.field{margin:0 0 13px}.field label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#59697B;font-weight:650;margin-bottom:6px}
+.field input,.field select{width:100%;border:1px solid #DCE3EA;border-radius:8px;padding:10px 11px;font-size:14px;color:var(--ink);background:#fff;outline:none}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,134,245,.12)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:5px}
+.content{display:grid;gap:16px;min-width:0}
+.card{padding:19px}
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.chart-head h3{margin:0 0 4px}.sub{font-size:12px;color:var(--muted)}
+.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:#5E6B7A}
+.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.chart-wrap{height:390px;position:relative}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.metric{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.metric .label{font-size:11px;color:var(--muted);font-weight:650;margin-bottom:7px}
+.metric .value{font-size:21px;font-weight:780;letter-spacing:-.03em}
+.metric .note{font-size:11px;color:var(--muted);margin-top:5px}
+.status{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:12px;background:#FFF4F0;border:1px solid #FCE0D7}
+.status.good{background:#ECF9F3;border-color:#D4F1E3}
+.status-icon{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#FCE1D8;color:#B94C2E;font-weight:800;flex:none}
+.status.good .status-icon{background:#D7F3E6;color:#167A56}
+.status h3{margin:0 0 5px;font-size:15px}.status p{margin:0;color:#657386;font-size:12px;line-height:1.5}
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.strategy{border:1px solid var(--line);border-radius:12px;padding:15px}
+.strategy h4{margin:0 0 7px;font-size:13px}.strategy strong{font-size:21px}.strategy p{font-size:11px;color:var(--muted);line-height:1.5;margin:6px 0 0}
+button{border:0;border-radius:9px;padding:10px 13px;background:var(--navy);color:#fff;font-weight:700;cursor:pointer}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.secondary{background:#EEF2F5;color:#435265}
+.disclaimer{font-size:11px;color:#8491A0;line-height:1.5}
+footer{text-align:center;color:#8A96A4;font-size:11px;padding:25px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.panel{position:static;max-height:none}.metrics{grid-template-columns:repeat(2,1fr)}.chart-wrap{height:330px}}
+@media(max-width:520px){header{padding:14px}.pill{display:none}main{padding:0 12px;margin:16px auto}.card{padding:14px}.metrics{gap:8px}.metric{padding:12px}.metric .value{font-size:18px}.chart-wrap{height:290px}.strategy-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">MH</div><div><h1>Retirement Planner</h1><small>MH SUCCESS ACADEMY</small></div></div>
+  <div class="pill">EPF + PRS Planning</div>
+</header>
+<main>
+  <div class="intro"><h2>Your retirement roadmap</h2><p>See how your EPF and PRS may grow before retirement — and how your fund may be utilised afterwards.</p></div>
+  <div class="layout">
+    <aside class="panel">
+      <h3>Configuration</h3>
+      <div class="section" style="border:0;padding:0;margin:0">
+        <div class="section-title">Personal profile</div>
+        <div class="two">
+          <div class="field"><label for="age">Current age</label><input id="age" type="number" min="18" max="90" value="42"></div>
+          <div class="field"><label for="retire">Retirement age</label><input id="retire" type="number" min="19" max="90" value="60"></div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="life">Life expectancy</label><input id="life" type="number" min="40" max="110" value="85"></div>
+          <div class="field"><label for="salary">Monthly salary (RM)</label><input id="salary" type="number" min="0" step="100" value="5000"></div>
+        </div>
+        <div class="field"><label for="increment">Annual salary increment (%)</label><input id="increment" type="number" min="0" max="30" step=".1" value="3"></div>
+      </div>
+      <div class="section">
+        <div class="section-title">EPF information</div>
+        <div class="field"><label>Existing EPF balance (RM)</label><input id="epfBalance" type="number" min="0" step="100" value="150000"></div>
+        <div class="field"><label for="epfMode">Contribution input mode</label><select id="epfMode"><option value="auto">Automatic – based on salary</option><option value="manual">Manual – actual monthly amount</option></select></div>
+        <div id="autoFields">
+          <div class="two">
+            <div class="field"><label>Employee (%)</label><input id="employee" type="number" min="0" max="30" step=".1" value="11"></div>
+            <div class="field"><label>Employer (%)</label><input id="employer" type="number" min="0" max="30" step=".1" value="13"></div>
+          </div>
+        </div>
+        <div id="manualFields" style="display:none">
+          <div class="field"><label>Combined monthly EPF contribution (RM)</label><input id="manualContribution" type="number" min="0" step="10" value="1200"></div>
+        </div>
+        <div class="field"><label>EPF dividend assumption (%)</label><input id="epfRate" type="number" min="0" max="20" step=".1" value="5"></div>
+        <div class="hint">For this first prototype, EPF is modelled as one combined balance. Detailed Account 1, 2 and 3 allocation and official contribution schedules will be added in the next iteration.</div>
+      </div>
+      <div class="section">
+        <div class="section-title">PRS information</div>
+        <div class="field"><label>Existing PRS balance (RM)</label><input id="prsBalance" type="number" min="0" step="100" value="30000"></div>
+        <div class="field"><label>Monthly PRS contribution (RM)</label><input id="prsMonthly" type="number" min="0" step="10" value="300"></div>
+        <div class="field"><label>Additional annual lump sum (RM)</label><input id="prsAnnual" type="number" min="0" step="100" value="0"></div>
+        <div class="field"><label>PRS return assumption (%)</label><input id="prsRate" type="number" min="0" max="30" step=".1" value="6"></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Retirement lifestyle</div>
+        <div class="field"><label>Desired monthly income in today's RM</label><input id="income" type="number" min="0" step="100" value="4000"></div>
+        <div class="field"><label>Inflation assumption (%)</label><input id="inflation" type="number" min="0" max="20" step=".1" value="3"></div>
+        <div class="hint">The desired income is entered in today's purchasing power and increased for inflation up to retirement.</div>
+      </div>
+      <div class="actions"><button id="recalc">Update projection</button><button class="secondary" id="reset">Reset example</button></div>
+    </aside>
+    <section class="content">
+      <div class="card">
+        <div class="chart-head">
+          <div><h3>Retirement fund projection</h3><div class="sub">Accumulation before retirement · Fund utilisation after retirement</div></div>
+          <div class="legend">
+            <span><i class="dot" style="background:var(--blue)"></i>EPF</span>
+            <span><i class="dot" style="background:var(--yellow)"></i>PRS</span>
+            <span><i class="dot" style="background:var(--coral)"></i>Remaining capital</span>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="projectionChart"></canvas></div>
+        <div class="disclaimer">Illustrative projection based on the assumptions entered. Returns are not guaranteed. The retirement phase shows estimated remaining combined capital after monthly withdrawals and investment returns.</div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="label">PROJECTED EPF</div><div class="value" id="outEpf">RM0</div><div class="note">At retirement age</div></div>
+        <div class="metric"><div class="label">PROJECTED PRS</div><div class="value" id="outPrs">RM0</div><div class="note">At retirement age</div></div>
+        <div class="metric"><div class="label">TOTAL RETIREMENT FUND</div><div class="value" id="outTotal">RM0</div><div class="note">EPF + PRS combined</div></div>
+        <div class="metric"><div class="label">FIRST-YEAR MONTHLY INCOME</div><div class="value" id="outIncome">RM0</div><div class="note">Inflation-adjusted at retirement</div></div>
+      </div>
+      <div class="status" id="statusBox">
+        <div class="status-icon" id="statusIcon">!</div>
+        <div><h3 id="statusTitle">Retirement outlook</h3><p id="statusText">Your projection will appear here.</p></div>
+      </div>
+      <div class="card">
+        <h3>Retirement strategy comparison</h3>
+        <div class="strategy-grid">
+          <div class="strategy"><h4>Capital Intact</h4><strong id="intactCapital">RM0</strong><p>Estimated capital required to fund inflation-adjusted income while preserving nominal principal, using the assumed retirement return.</p></div>
+          <div class="strategy"><h4>Capital Liquidation</h4><strong id="liquidCapital">RM0</strong><p>Estimated capital required to support monthly withdrawals until the selected life expectancy, assuming the retirement return continues.</p></div>
+        </div>
+        <p class="disclaimer">These are simplified planning estimates. They do not model tax, fees, market volatility, EPF withdrawal eligibility or PRS-specific withdrawal restrictions.</p>
+      </div>
+    </section>
+  </div>
+</main>
+<footer>Developed by Hafiz Azizan · MH Success Academy</footer>
+<script>
+const ids=['age','retire','life','salary','increment','epfBalance','epfMode','employee','employer','manualContribution','epfRate','prsBalance','prsMonthly','prsAnnual','prsRate','income','inflation'];
+const el=id=>document.getElementById(id);
+const num=id=>Math.max(0,Number(el(id).value)||0);
+const money=n=>'RM'+Math.round(n).toLocaleString('en-MY');
+let chart;
+function calc(){
+  const age=num('age'), retire=num('retire'), life=num('life');
+  const salary=num('salary'), inc=num('increment')/100;
+  const epfRate=num('epfRate')/100, prsRate=num('prsRate')/100, inflation=num('inflation')/100;
+  const years=Math.max(0,retire-age);
+  if(age<18 || retire<=age || life<=retire || life>110){alert('Please check the ages. Retirement age must be above current age and life expectancy must be above retirement age.');return;}
+  let epf=num('epfBalance'), prs=num('prsBalance'), currentSalary=salary;
+  const epfSeries=[], prsSeries=[], totalSeries=[], remainSeries=[];
+  const ages=[];
+  const epfMonthly=(el('epfMode').value==='auto')?(num('employee')+num('employer'))/100*salary:num('manualContribution');
+  // Annual snapshots, using monthly compounding and contributions at month-end.
+  for(let y=0;y<=years;y++){
+    if(y>0){
+      for(let m=0;m<12;m++){
+        const contribution=el('epfMode').value==='auto'?(num('employee')+num('employer'))/100*currentSalary:num('manualContribution');
+        epf=(epf+contribution)*(1+epfRate)**(1/12);
+        prs=(prs+num('prsMonthly'))*(1+prsRate)**(1/12);
+      }
+      prs += num('prsAnnual');
+      currentSalary*=1+inc;
+    }
+    ages.push(age+y);epfSeries.push(Math.round(epf));prsSeries.push(Math.round(prs));totalSeries.push(Math.round(epf+prs));
+  }
+  const retirementFund=epf+prs;
+  const firstYearMonthly=num('income')*(1+inflation)**years;
+  const monthlyInflation=(1+inflation)**(1/12)-1;
+  const monthlyEpfReturn=(1+epfRate)**(1/12)-1;
+  const monthlyPrsReturn=(1+prsRate)**(1/12)-1;
+  // Use a weighted blended retirement return for the combined fund.
+  const blended=(retirementFund>0)?(epf*monthlyEpfReturn+prs*monthlyPrsReturn)/retirementFund:0;
+  let remaining=retirementFund;
+  let depletionAge=null;
+  for(let y=1;y<=life-retire;y++){
+    for(let m=0;m<12;m++){
+      const withdrawal=firstYearMonthly*(1+monthlyInflation)**((y-1)*12+m);
+      remaining=Math.max(0,remaining*(1+blended)-withdrawal);
+    }
+    ages.push(retire+y);
+    remainSeries.push(Math.round(remaining));
+    if(remaining<=0 && depletionAge===null)depletionAge=retire+y;
+  }
+  const labels=ages.map(a=>String(a));
+  const epfData=[...epfSeries,...Array(life-retire).fill(null)];
+  const prsData=[...prsSeries,...Array(life-retire).fill(null)];
+  const remainingData=[...Array(years).fill(null),...remainSeries];
+  const lastAnnualReturn=blended*12;
+  const intactRate=lastAnnualReturn-inflation;
+  const intactRequired=intactRate>0?firstYearMonthly*12/intactRate:Infinity;
+  const n=(life-retire)*12, r=blended-monthlyInflation;
+  let liquidationRequired;
+  if(n<=0)liquidationRequired=0;
+  else if(Math.abs(blended-monthlyInflation)<1e-10)liquidationRequired=firstYearMonthly*n;
+  else liquidationRequired=firstYearMonthly*(1-Math.pow((1+monthlyInflation)/(1+blended),n))/(blended-monthlyInflation);
+  // More precise PV of monthly withdrawals, with first withdrawal at end of month.
+  let pv=0, w=firstYearMonthly;
+  for(let m=1;m<=n;m++){pv+=w/Math.pow(1+blended,m);w*=1+monthlyInflation;}
+  liquidationRequired=pv;
+  el('outEpf').textContent=money(epf);el('outPrs').textContent=money(prs);
+  el('outTotal').textContent=money(retirementFund);el('outIncome').textContent=money(firstYearMonthly);
+  el('intactCapital').textContent=Number.isFinite(intactRequired)?money(intactRequired):'Not achievable';
+  el('liquidCapital').textContent=money(liquidationRequired);
+  const gap=liquidationRequired-retirementFund;
+  const box=el('statusBox');
+  if(gap>0){box.classList.remove('good');el('statusIcon').textContent='!';el('statusTitle').textContent='Retirement shortfall detected';}
+  else{box.classList.add('good');el('statusIcon').textContent='✓';el('statusTitle').textContent='Projected fund covers the target';}
+  el('statusText').textContent=`At age ${retire}, your projected combined EPF and PRS fund is ${money(retirementFund)}. Your estimated Capital Liquidation requirement is ${money(liquidationRequired)}. ${gap>0?'The estimated shortfall is '+money(gap)+'.':'The estimated surplus is '+money(Math.abs(gap))+'.'} ${depletionAge?'Under this simplified projection, funds are depleted around age '+depletionAge+'.':'Your fund is projected to last through age '+life+'.'}`;
+  if(chart)chart.destroy();
+  chart=new Chart(el('projectionChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'EPF',data:epfData,backgroundColor:'#2586F5',stack:'accum',borderRadius:2,barPercentage:.82,categoryPercentage:.9},
+      {label:'PRS',data:prsData,backgroundColor:'#F5BD32',stack:'accum',borderRadius:2,barPercentage:.82,categoryPercentage:.9},
+      {label:'Remaining capital',data:remainingData,backgroundColor:'#F07855',stack:'retire',borderRadius:2,barPercentage:.82,categoryPercentage:.9}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${money(c.raw||0)}`}}},
+      scales:{x:{stacked:true,grid:{display:false},title:{display:true,text:'Age'},ticks:{maxTicksLimit:14}},
+        y:{stacked:true,beginAtZero:true,title:{display:true,text:'Fund value (RM)'},ticks:{callback:v=>v>=1000000?'RM'+(v/1000000).toFixed(1)+'m':'RM'+Math.round(v/1000)+'k'},grid:{color:'#EDF1F5'}}}}
+  });
+}
+el('epfMode').addEventListener('change',()=>{el('autoFields').style.display=el('epfMode').value==='auto'?'block':'none';el('manualFields').style.display=el('epfMode').value==='manual'?'block':'none';calc();});
+el('recalc').addEventListener('click',calc);
+ids.forEach(id=>el(id).addEventListener('change',()=>{if(id!=='epfMode')calc();}));
+el('reset').addEventListener('click',()=>{const defaults={age:42,retire:60,life:85,salary:5000,increment:3,epfBalance:150000,epfMode:'auto',employee:11,employer:13,manualContribution:1200,epfRate:5,prsBalance:30000,prsMonthly:300,prsAnnual:0,prsRate:6,income:4000,inflation:3};Object.entries(defaults).forEach(([k,v])=>el(k).value=v);el('autoFields').style.display='block';el('manualFields').style.display='none';calc();});
+calc();
+</script>
+</body>
+</html>
