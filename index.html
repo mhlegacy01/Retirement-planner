@@ -25,33 +25,33 @@ main{max-width:1450px;margin:22px auto;padding:0 20px}.intro{margin-bottom:18px}
 <aside class="panel">
 <h3>Configuration</h3><div class="hint" style="margin:-7px 0 12px">Grey examples are guides only. Blank optional balances and contributions are treated as RM0. Enter your own assumptions to calculate.</div>
 <div class="section" style="border:0;padding:0;margin:0"><div class="section-title">Personal profile</div>
-<div class="two"><div class="field"><label>Current age</label><input id="age" type="number" min="18" max="90" placeholder="e.g. 42"></div><div class="field"><label>Retirement age</label><input id="retire" type="number" min="19" max="90" value="60"></div></div>
-<div class="two"><div class="field"><label>Life expectancy</label><input id="life" type="number" min="40" max="110" placeholder="e.g. 85"></div><div class="field"><label>Monthly salary (RM)</label><input id="salary" type="number" min="0" step="100" placeholder="e.g. 5,000"></div></div>
-<div class="field"><label>Annual salary increment (%)</label><input id="increment" type="number" min="0" max="30" step=".1" placeholder="e.g. 3"></div></div>
+<div class="two"><div class="field"><label>Current age</label><input enterkeyhint="next" id="age" type="number" min="18" max="90" placeholder="e.g. 42"></div><div class="field"><label>Retirement age</label><input enterkeyhint="next" id="retire" type="number" min="19" max="90" value="60"></div></div>
+<div class="two"><div class="field"><label>Life expectancy</label><input enterkeyhint="next" id="life" type="number" min="40" max="110" placeholder="e.g. 85"></div><div class="field"><label>Monthly salary (RM)</label><input enterkeyhint="next" id="salary" type="number" min="0" step="100" placeholder="e.g. 5,000"></div></div>
+<div class="field"><label>Annual salary increment (%)</label><input enterkeyhint="next" id="increment" type="number" min="0" max="30" step=".1" placeholder="e.g. 3"></div></div>
 <div class="section"><div class="section-title">EPF information</div>
-<div class="field"><label>Existing EPF balance (RM)</label><input id="epfBalance" type="number" min="0" placeholder="e.g. 150,000"></div>
-<div class="field"><label>Contribution input mode</label><select id="epfMode"><option value="auto">Automatic – based on salary</option><option value="manual">Manual – actual monthly amount</option></select></div>
-<div id="autoFields"><div class="two"><div class="field"><label>Employee (%)</label><input id="employee" type="number" min="0" max="30" step=".1" placeholder="e.g. 11"></div><div class="field"><label>Employer (%)</label><input id="employer" type="number" min="0" max="30" step=".1" placeholder="e.g. 13"></div></div></div>
-<div id="manualFields" style="display:none"><div class="field"><label>Combined monthly EPF contribution (RM)</label><input id="manualContribution" type="number" min="0" placeholder="e.g. 1,200"></div></div>
-<div class="field"><label>EPF dividend assumption (%)</label><input id="epfRate" type="number" min="0" max="20" step=".1" placeholder="e.g. 5"></div>
+<div class="field"><label>Existing EPF balance (RM)</label><input enterkeyhint="next" id="epfBalance" type="number" min="0" placeholder="e.g. 150,000"></div>
+<div class="field"><label>Contribution input mode</label><select enterkeyhint="next" id="epfMode"><option value="auto">Automatic – based on salary</option><option value="manual">Manual – actual monthly amount</option></select></div>
+<div id="autoFields"><div class="two"><div class="field"><label>Employee (%)</label><input enterkeyhint="next" id="employee" type="number" min="0" max="30" step=".1" placeholder="e.g. 11"></div><div class="field"><label>Employer (%)</label><input enterkeyhint="next" id="employer" type="number" min="0" max="30" step=".1" placeholder="e.g. 13"></div></div></div>
+<div id="manualFields" style="display:none"><div class="field"><label>Combined monthly EPF contribution (RM)</label><input enterkeyhint="next" id="manualContribution" type="number" min="0" placeholder="e.g. 1,200"></div></div>
+<div class="field"><label>EPF dividend assumption (%)</label><input enterkeyhint="next" id="epfRate" type="number" min="0" max="20" step=".1" placeholder="e.g. 5"></div>
 <div class="hint">Prototype estimate. Official KWSP contribution schedules and account allocation rules are not yet integrated.</div></div>
-<div class="section"><div class="section-title">PRS information</div>
-<div class="field"><label>Existing PRS balance – combined (RM)</label><input id="prsBalance" type="number" min="0" placeholder="e.g. 30,000"></div>
-<div class="field"><label>Individual PRS monthly contribution (RM)</label><input id="prsMonthly" type="number" min="0" placeholder="e.g. 300"></div>
-<div class="field"><label>Corporate PRS monthly contribution (RM)</label><input id="corpPrsMonthly" type="number" min="0" placeholder="e.g. 500"></div>
-<div class="field"><label>Additional annual PRS lump sum (RM)</label><input id="prsAnnual" type="number" min="0" placeholder="e.g. 2,000"></div>
-<div class="field"><label>PRS return assumption (%)</label><input id="prsRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 6"></div>
-<div class="hint">Existing PRS balance remains combined. Future individual and corporate contributions are tracked separately for gap-planning recommendations.</div></div>
-<div class="section"><div class="section-title">Cash investment</div>
-<div class="field"><label>Existing cash investment balance (RM)</label><input id="cashBalance" type="number" min="0" placeholder="e.g. 50,000"></div>
-<div class="field"><label>Current monthly cash investment (RM)</label><input id="cashMonthly" type="number" min="0" placeholder="e.g. 500"></div>
-<div class="field"><label>Expected cash investment return (%)</label><input id="cashRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 4"></div></div>
 <div class="section"><div class="section-title">Retirement lifestyle</div>
-<div class="field"><label>Desired monthly income in today's RM</label><input id="income" type="number" min="0" placeholder="e.g. 4,000"></div>
-<div class="field"><label>Inflation assumption (%)</label><input id="inflation" type="number" min="0" max="20" step=".1" placeholder="e.g. 3"></div>
-<div class="field"><label>Expected annual return during retirement (%)</label><input id="retirementRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 4"></div>
+<div class="field"><label>Desired monthly income in today's RM</label><input enterkeyhint="next" id="income" type="number" min="0" placeholder="e.g. 4,000"></div>
+<div class="field"><label>Inflation assumption (%)</label><input enterkeyhint="next" id="inflation" type="number" min="0" max="20" step=".1" placeholder="e.g. 3"></div>
+<div class="field"><label>Expected annual return during retirement (%)</label><input enterkeyhint="next" id="retirementRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 4"></div>
 <div class="hint">Enter your expected annual portfolio return after retirement. This single assumption is used to calculate withdrawals, fund sustainability, Capital Intact, Capital Liquidation and the retirement gap.</div>
 <div class="hint">Income entered in today's purchasing power and adjusted for inflation up to retirement.</div></div>
+<div class="section"><div class="section-title">PRS information</div><div class="hint" style="margin-bottom:10px">Optional. If you do not have PRS, leave these fields blank. Blank balances and contributions are treated as RM0; a blank PRS return assumption is treated as 0% for projections and suggestions.</div>
+<div class="field"><label>Existing PRS balance – combined (RM)</label><input enterkeyhint="next" id="prsBalance" type="number" min="0" placeholder="e.g. 30,000"></div>
+<div class="field"><label>Individual PRS monthly contribution (RM)</label><input enterkeyhint="next" id="prsMonthly" type="number" min="0" placeholder="e.g. 300"></div>
+<div class="field"><label>Corporate PRS monthly contribution (RM)</label><input enterkeyhint="next" id="corpPrsMonthly" type="number" min="0" placeholder="e.g. 500"></div>
+<div class="field"><label>Additional annual PRS lump sum (RM)</label><input enterkeyhint="next" id="prsAnnual" type="number" min="0" placeholder="e.g. 2,000"></div>
+<div class="field"><label>PRS return assumption (%)</label><input enterkeyhint="next" id="prsRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 6"></div>
+<div class="hint">Existing PRS balance remains combined. Future individual and corporate contributions are tracked separately for gap-planning recommendations.</div></div>
+<div class="section"><div class="section-title">Cash investment</div><div class="hint" style="margin-bottom:10px">Optional. If you do not have cash investments, leave these fields blank. Blank balances and contributions are treated as RM0; a blank cash return assumption is treated as 0% for projections and suggestions.</div>
+<div class="field"><label>Existing cash investment balance (RM)</label><input enterkeyhint="next" id="cashBalance" type="number" min="0" placeholder="e.g. 50,000"></div>
+<div class="field"><label>Current monthly cash investment (RM)</label><input enterkeyhint="next" id="cashMonthly" type="number" min="0" placeholder="e.g. 500"></div>
+<div class="field"><label>Expected cash investment return (%)</label><input enterkeyhint="next" id="cashRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 4"></div></div>
 <div class="actions"><button id="recalc">Update projection</button><button class="secondary" id="reset">Reset example</button></div>
 </aside>
 <section class="content">
@@ -81,10 +81,10 @@ main{max-width:1450px;margin:22px auto;padding:0 20px}.intro{margin-bottom:18px}
 </div>
 <div class="card"><div class="chart-head"><div><h3>How to Allocate Your Recommended Monthly Savings</h3><div class="sub">Your retirement gap is used to calculate the monthly amount. Choose how to distribute the top-up across the four channels. The combined amount appears when your allocation totals 100%.</div></div></div>
 <div class="split-grid">
-<div class="split"><label style="color:var(--blue)">EPF allocation (%)</label><input id="splitEpf" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitEpfOut">—</div></div>
-<div class="split"><label style="color:#715CD1">Corporate PRS (%)</label><input id="splitCorp" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitCorpOut">—</div></div>
-<div class="split"><label style="color:#B28712">Individual PRS (%)</label><input id="splitPrs" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitPrsOut">—</div></div>
-<div class="split"><label style="color:#168A65">Cash investment (%)</label><input id="splitCash" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitCashOut">—</div></div>
+<div class="split"><label style="color:var(--blue)">EPF allocation (%)</label><input enterkeyhint="next" id="splitEpf" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitEpfOut">—</div></div>
+<div class="split"><label style="color:#715CD1">Corporate PRS (%)</label><input enterkeyhint="next" id="splitCorp" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitCorpOut">—</div></div>
+<div class="split"><label style="color:#B28712">Individual PRS (%)</label><input enterkeyhint="next" id="splitPrs" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitPrsOut">—</div></div>
+<div class="split"><label style="color:#168A65">Cash investment (%)</label><input enterkeyhint="next" id="splitCash" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitCashOut">—</div></div>
 </div>
 <div class="recommendation" style="margin-top:12px"><div class="sub">RECOMMENDED TOTAL MONTHLY SAVINGS</div><strong id="combinedTopup">—</strong><div class="hint" id="splitWarning">Enter your preferred allocation percentages. They must add up to exactly 100% to calculate the combined monthly amount.</div></div>
 </div>
@@ -143,9 +143,9 @@ function updateSplit(){
  el('splitWarning').textContent=total===100?'Allocation totals 100%. This is the combined monthly amount needed to close your projected retirement gap, using each channel’s own pre-retirement return assumption.':`Your allocation currently totals ${total}%. Adjust the four percentages so they add up to exactly 100%.`;
 }
 function calc(){
- const required=['age','life','income','inflation','epfRate','prsRate','cashRate','retirementRate'];
+ const required=['age','life','income','inflation','epfRate','retirementRate'];
  const contributionInputs=el('epfMode').value==='auto'?['salary','employee','employer']:['manualContribution'];
- if([...required,...contributionInputs].some(id=>!has(id))){clearOutputs('Please complete the required profile and return assumptions. Also enter your salary and EPF contribution rates (Automatic mode), or your combined monthly EPF contribution (Manual mode). Grey examples are guides only.');return;}
+ if([...required,...contributionInputs].some(id=>!has(id))){clearOutputs('Please complete the required profile, EPF details and retirement return assumption. PRS and cash investment details are optional; leave them blank if not applicable. Grey examples are guides only.');return;}
  const age=num('age'),retire=num('retire'),life=num('life'),years=retire-age,months=years*12;
  if(age<18||retire<=age||life<=retire||life>110){clearOutputs('Please check the ages. Retirement age must be above current age and life expectancy must be above retirement age.');return;}
  const salary=num('salary'),increment=num('increment')/100,epfRate=num('epfRate'),prsRate=num('prsRate'),cashRate=num('cashRate'),inflation=num('inflation'),retirementRate=num('retirementRate');
@@ -182,7 +182,7 @@ function calc(){
  if(gap>0){status.classList.remove('good');el('statusIcon').textContent='!';el('statusTitle').textContent='Retirement shortfall detected';}
  else{status.classList.add('good');el('statusIcon').textContent='✓';el('statusTitle').textContent='Projected fund covers the target';}
  const depletion=retirementResult.depletionAge?`Funds are projected to run out around age ${retirementResult.depletionAge}.`:`An estimated ${money(retirementResult.balance)} remains at age ${life}.`;
- el('statusText').textContent=`At age ${retire}, your projected EPF, PRS and cash investments total ${money(retirementFund)}. At an assumed ${retirementRate}% annual return during retirement, the estimated Capital Liquidation requirement is ${money(pv)}. ${gap>0?'Estimated shortfall: '+money(gap)+'.':'Estimated surplus: '+money(retirementFund-pv)+'.'} ${depletion}`;
+ el('statusText').textContent=`At age ${retire}, your projected EPF, PRS and cash investments total ${money(retirementFund)}. Blank PRS or cash fields are treated as zero; blank PRS/cash return assumptions use 0%. At an assumed ${retirementRate}% annual return during retirement, the estimated Capital Liquidation requirement is ${money(pv)}. ${gap>0?'Estimated shortfall: '+money(gap)+'.':'Estimated surplus: '+money(retirementFund-pv)+'.'} ${depletion}`;
  if(gap===0){el('gapStatus').classList.add('good');el('gapIcon').textContent='✓';el('gapTitle').textContent='No funding gap detected';el('gapText').textContent='Based on the assumptions entered, the projected fund covers the Capital Liquidation target. You can still explore additional savings to build a buffer.';}
  else{el('gapStatus').classList.remove('good');el('gapIcon').textContent='!';el('gapTitle').textContent='Estimated retirement gap: '+money(gap);el('gapText').textContent=`You have ${years} years to retirement. The monthly amounts below are suggestions calculated from your projected gap, years to retirement and the return assumptions entered. Each option shows a standalone approach.`;}
  el('epfTopup').textContent=money(topups.epf)+' / month';el('corpTopup').textContent=money(topups.corp)+' / month';el('prsTopup').textContent=money(topups.prs)+' / month';el('cashTopup').textContent=money(topups.cash)+' / month';
@@ -205,6 +205,22 @@ function calc(){
  {label:'Remaining capital',data:remainingSeries,backgroundColor:'#F07855',stack:'retire',borderRadius:2}]},
  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${money(c.raw||0)}`}}},scales:{x:{stacked:true,grid:{display:false},title:{display:true,text:'Age'},ticks:{maxTicksLimit:14}},y:{stacked:true,beginAtZero:true,title:{display:true,text:'Fund value (RM)'},ticks:{callback:v=>v>=1000000?'RM'+(v/1000000).toFixed(1)+'m':'RM'+Math.round(v/1000)+'k'},grid:{color:'#EDF1F5'}}}}});
 }
+
+// Keyboard and iPad input navigation: Tab follows the visible form order;
+// pressing Enter/Next on an input advances to the next visible input/select.
+document.querySelectorAll('.panel input, .panel select').forEach((field)=>{
+ field.addEventListener('keydown',(event)=>{
+  if(event.key==='Enter'){
+   event.preventDefault();
+   const fields=[...document.querySelectorAll('.panel input:not([type="hidden"]), .panel select')]
+    .filter(node=>!node.disabled && node.offsetParent!==null);
+   const next=fields[fields.indexOf(field)+1];
+   if(next) next.focus();
+   else el('recalc').focus();
+  }
+ });
+});
+
 el('epfMode').addEventListener('change',()=>{el('autoFields').style.display=el('epfMode').value==='auto'?'block':'none';el('manualFields').style.display=el('epfMode').value==='manual'?'block':'none';calc();});
 el('recalc').addEventListener('click',calc);
 ids.forEach(id=>el(id).addEventListener('input',()=>{if(!id.startsWith('split'))calc();}));
