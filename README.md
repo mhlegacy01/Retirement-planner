@@ -1,23 +1,18 @@
-# MH Retirement Planner v1.0 prototype
+# MH Retirement Planner — Latest Prototype
 
-## Run
-Open `index.html` in a modern browser. An internet connection is required to load Chart.js from its CDN.
+## Files
+- `index.html` — complete single-file web app. HTML, CSS and JavaScript are included in this file.
+- `README.md` — setup and deployment notes.
 
-## Included in this first prototype
-- Simple two-column dashboard: configuration on the left, projection and results on the right.
-- EPF automatic contribution estimate or manual combined monthly contribution.
-- Combined PRS balance and monthly/annual contribution inputs.
-- EPF and PRS accumulation projections.
-- Retirement drawdown projection with inflation-adjusted monthly withdrawals.
-- Bright blue EPF, sunny yellow PRS and coral retirement utilisation bars.
-- Capital Intact and Capital Liquidation indicative estimates.
+## GitHub Pages deployment
+1. Open the `mhlegacy01/Retirement-planner` repository.
+2. Make sure you are on the `main` branch.
+3. Upload this `index.html` to the repository root.
+4. Confirm GitHub shows that it will replace the existing `index.html`.
+5. Commit the change to `main`.
+6. Wait for GitHub Pages to redeploy, then refresh the site.
 
-## Important limitations
-This is a visual and calculation prototype, not a production-ready financial planning tool.
-- EPF is currently modelled as one combined balance. Account 1/2/3 balances, official contribution tables by salary/age/member category, contribution allocation, and official dividend calculation conventions are not yet implemented.
-- PRS is modelled as one combined balance; fees, fund-specific returns and withdrawal rules are not modelled.
-- Retirement drawdown uses a simplified blended monthly return.
-- No tax, fees, volatility, sequence-of-returns risk, other income, or statutory withdrawal eligibility is modelled.
-- Assumptions are editable and returns are not guaranteed.
+The required filename is exactly `index.html` (all lowercase). Do not upload it as `MH_Retirement_Planner_Latest_index.html`, and do not put it inside another folder.
 
-The next development step should be to validate and improve the calculation engine before production use.
+## Notes
+This is an illustrative retirement-planning prototype. Validate calculation methodology, EPF/KWSP rules, PRS rules, tax treatment, fees and product-specific assumptions before using it for client advice. Investment returns are assumptions and are not guaranteed.
