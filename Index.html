@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MH Retirement Planner v1.2.1</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--blue:#2586F5;--yellow:#F5BD32;--coral:#F07855;--green:#25B889;--purple:#8B75E8;--rose:#F0A0A8;--ink:#263445;--muted:#718096;--line:#E7ECF1;--bg:#F7F8FA;--navy:#173D35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px}.logo{width:38px;height:38px;border-radius:11px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800}.brand h1{font-size:18px;margin:0}.brand small{color:var(--muted);font-size:11px;letter-spacing:.08em}.pill{font-size:12px;color:#187B5C;background:#E8F7F1;border-radius:20px;padding:7px 11px;font-weight:650}
+main{max-width:1450px;margin:22px auto;padding:0 20px}.intro{margin-bottom:18px}.intro h2{margin:0 0 5px;font-size:23px}.intro p{margin:0;color:var(--muted);font-size:14px}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:18px;align-items:start}.panel,.card{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 2px 8px rgba(25,42,70,.035)}.panel{padding:18px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}.panel h3,.card h3{font-size:14px;margin:0 0 14px;letter-spacing:.035em}.section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.section-title{font-size:12px;font-weight:750;color:#506176;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}.field{margin:0 0 12px}.field label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#59697B;font-weight:650;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid #DCE3EA;border-radius:8px;padding:10px 11px;font-size:14px;color:var(--ink);background:#fff;outline:none}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,134,245,.12)}.field input::placeholder,.split input::placeholder{color:#AAB4C2;opacity:1}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hint,.disclaimer{font-size:11px;color:#8491A0;line-height:1.5}.content{display:grid;gap:16px;min-width:0}.card{padding:19px}.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}.chart-head h3{margin:0 0 4px}.sub{font-size:12px;color:var(--muted)}.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:#5E6B7A}.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}.chart-wrap{height:360px;position:relative}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}.metric .label{font-size:11px;color:var(--muted);font-weight:650;margin-bottom:7px}.metric .value{font-size:20px;font-weight:780;letter-spacing:-.03em}.metric .note{font-size:11px;color:var(--muted);margin-top:5px}
+.status{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:12px;background:#FFF4F0;border:1px solid #FCE0D7}.status.good{background:#ECF9F3;border-color:#D4F1E3}.status-icon{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#FCE1D8;color:#B94C2E;font-weight:800;flex:none}.status.good .status-icon{background:#D7F3E6;color:#167A56}.status h3{margin:0 0 5px;font-size:15px}.status p{margin:0;color:#657386;font-size:12px;line-height:1.5}
+.strategy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.strategy{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff}.strategy-top{display:flex;justify-content:space-between;gap:8px;align-items:center}.strategy .eyebrow{font-size:10px;font-weight:800;letter-spacing:.08em;color:#8A97A8}.strategy h4{margin:5px 0 10px;font-size:15px}.strategy .amount{font-size:23px;font-weight:800}.strategy p{font-size:11px;color:var(--muted);line-height:1.5;margin:7px 0 0}.tag{font-size:10px;font-weight:750;padding:5px 8px;border-radius:20px;background:#F1F5F9;color:#536477}
+.split-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.split{background:#F8FAFC;border:1px solid var(--line);border-radius:10px;padding:11px}.split label{font-size:11px;font-weight:700;display:block;margin-bottom:6px}.split input{width:100%;padding:8px;border:1px solid #DCE3EA;border-radius:7px;font-size:13px}.split .small{font-size:10px;color:var(--muted);margin-top:5px}.recommendation{background:#F3F8FF;border:1px solid #D9E9FF;border-radius:12px;padding:15px}.recommendation strong{font-size:22px;color:#1C66BD}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button{border:0;border-radius:9px;padding:10px 13px;background:var(--navy);color:#fff;font-weight:700;cursor:pointer}.secondary{background:#EEF2F5;color:#435265}footer{text-align:center;color:#8A96A4;font-size:11px;padding:25px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.panel{position:static;max-height:none}.metrics{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){header{padding:14px}.pill{display:none}main{padding:0 12px;margin:15px auto}.card{padding:14px}.metrics{gap:8px}.metric{padding:11px}.metric .value{font-size:17px}.chart-wrap{height:290px}.strategy-grid{grid-template-columns:1fr}.split-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">MH</div><div><h1>Retirement Planner</h1><small>MH SUCCESS ACADEMY</small></div></div><div class="pill">EPF + PRS + Cash Planning</div></header>
+<main>
+<div class="intro"><h2>Your retirement roadmap</h2><p>Project your retirement fund, understand the shortfall and explore ways to close the gap.</p></div>
+<div class="layout">
+<aside class="panel">
+<h3>Configuration</h3><div class="hint" style="margin:-7px 0 12px">Grey examples are guides only. Blank optional balances and contributions are treated as RM0. Enter your own assumptions to calculate.</div>
+<div class="section" style="border:0;padding:0;margin:0"><div class="section-title">Personal profile</div>
+<div class="two"><div class="field"><label>Current age</label><input id="age" type="number" min="18" max="90" placeholder="e.g. 42"></div><div class="field"><label>Retirement age</label><input id="retire" type="number" min="19" max="90" value="60"></div></div>
+<div class="two"><div class="field"><label>Life expectancy</label><input id="life" type="number" min="40" max="110" placeholder="e.g. 85"></div><div class="field"><label>Monthly salary (RM)</label><input id="salary" type="number" min="0" step="100" placeholder="e.g. 5,000"></div></div>
+<div class="field"><label>Annual salary increment (%)</label><input id="increment" type="number" min="0" max="30" step=".1" placeholder="e.g. 3"></div></div>
+<div class="section"><div class="section-title">EPF information</div>
+<div class="field"><label>Existing EPF balance (RM)</label><input id="epfBalance" type="number" min="0" placeholder="e.g. 150,000"></div>
+<div class="field"><label>Contribution input mode</label><select id="epfMode"><option value="auto">Automatic – based on salary</option><option value="manual">Manual – actual monthly amount</option></select></div>
+<div id="autoFields"><div class="two"><div class="field"><label>Employee (%)</label><input id="employee" type="number" min="0" max="30" step=".1" placeholder="e.g. 11"></div><div class="field"><label>Employer (%)</label><input id="employer" type="number" min="0" max="30" step=".1" placeholder="e.g. 13"></div></div></div>
+<div id="manualFields" style="display:none"><div class="field"><label>Combined monthly EPF contribution (RM)</label><input id="manualContribution" type="number" min="0" placeholder="e.g. 1,200"></div></div>
+<div class="field"><label>EPF dividend assumption (%)</label><input id="epfRate" type="number" min="0" max="20" step=".1" placeholder="e.g. 5"></div>
+<div class="hint">Prototype estimate. Official KWSP contribution schedules and account allocation rules are not yet integrated.</div></div>
+<div class="section"><div class="section-title">PRS information</div>
+<div class="field"><label>Existing PRS balance – combined (RM)</label><input id="prsBalance" type="number" min="0" placeholder="e.g. 30,000"></div>
+<div class="field"><label>Individual PRS monthly contribution (RM)</label><input id="prsMonthly" type="number" min="0" placeholder="e.g. 300"></div>
+<div class="field"><label>Corporate PRS monthly contribution (RM)</label><input id="corpPrsMonthly" type="number" min="0" placeholder="e.g. 500"></div>
+<div class="field"><label>Additional annual PRS lump sum (RM)</label><input id="prsAnnual" type="number" min="0" placeholder="e.g. 2,000"></div>
+<div class="field"><label>PRS return assumption (%)</label><input id="prsRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 6"></div>
+<div class="hint">Existing PRS balance remains combined. Future individual and corporate contributions are tracked separately for gap-planning recommendations.</div></div>
+<div class="section"><div class="section-title">Cash investment</div>
+<div class="field"><label>Existing cash investment balance (RM)</label><input id="cashBalance" type="number" min="0" placeholder="e.g. 50,000"></div>
+<div class="field"><label>Current monthly cash investment (RM)</label><input id="cashMonthly" type="number" min="0" placeholder="e.g. 500"></div>
+<div class="field"><label>Expected cash investment return (%)</label><input id="cashRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 4"></div></div>
+<div class="section"><div class="section-title">Retirement lifestyle</div>
+<div class="field"><label>Desired monthly income in today's RM</label><input id="income" type="number" min="0" placeholder="e.g. 4,000"></div>
+<div class="field"><label>Inflation assumption (%)</label><input id="inflation" type="number" min="0" max="20" step=".1" placeholder="e.g. 3"></div>
+<div class="field"><label>Expected annual return during retirement (%)</label><input id="retirementRate" type="number" min="0" max="30" step=".1" placeholder="e.g. 4"></div>
+<div class="hint">Enter your expected annual portfolio return after retirement. This single assumption is used to calculate withdrawals, fund sustainability, Capital Intact, Capital Liquidation and the retirement gap.</div>
+<div class="hint">Income entered in today's purchasing power and adjusted for inflation up to retirement.</div></div>
+<div class="actions"><button id="recalc">Update projection</button><button class="secondary" id="reset">Reset example</button></div>
+</aside>
+<section class="content">
+<div class="card"><div class="chart-head"><div><h3>Retirement fund projection</h3><div class="sub">EPF + PRS + cash accumulation · Fund utilisation after retirement</div></div>
+<div class="legend"><span><i class="dot" style="background:var(--blue)"></i>EPF</span><span><i class="dot" style="background:var(--yellow)"></i>PRS</span><span><i class="dot" style="background:var(--green)"></i>Cash</span><span><i class="dot" style="background:var(--coral)"></i>Remaining capital</span></div></div>
+<div class="chart-wrap"><canvas id="projectionChart"></canvas></div><div class="disclaimer">Illustrative projection based on the assumptions entered. Returns are not guaranteed. Retirement phase shows estimated remaining combined capital after inflation-adjusted withdrawals.</div></div>
+<div class="metrics">
+<div class="metric"><div class="label">PROJECTED EPF</div><div class="value" id="outEpf">RM0</div><div class="note">At retirement age</div></div>
+<div class="metric"><div class="label">PROJECTED PRS</div><div class="value" id="outPrs">RM0</div><div class="note">Individual + corporate</div></div>
+<div class="metric"><div class="label">PROJECTED CASH</div><div class="value" id="outCash">RM0</div><div class="note">At retirement age</div></div>
+<div class="metric"><div class="label">TOTAL RETIREMENT FUND</div><div class="value" id="outTotal">RM0</div><div class="note">EPF + PRS + cash</div></div>
+</div>
+<div class="status" id="statusBox"><div class="status-icon" id="statusIcon">!</div><div><h3 id="statusTitle">Retirement outlook</h3><p id="statusText">Your projection will appear here.</p></div></div>
+<div class="card"><h3>Retirement strategy comparison</h3><div class="strategy-grid">
+<div class="strategy"><div class="strategy-top"><span class="eyebrow">STRATEGY A</span><span class="tag">Capital Intact</span></div><h4>Preserve nominal principal</h4><div class="amount" id="intactCapital">RM0</div><p>Indicative capital required to fund inflation-adjusted income while preserving nominal principal. Actual sustainability depends on returns, inflation and fees.</p></div>
+<div class="strategy"><div class="strategy-top"><span class="eyebrow">STRATEGY B</span><span class="tag">Capital Liquidation</span></div><h4>Use capital over retirement</h4><div class="amount" id="liquidCapital">RM0</div><p>Indicative capital required to support monthly withdrawals until the selected life expectancy.</p></div>
+</div></div>
+<div class="card" id="gapAnalysis"><div class="chart-head"><div><h3>Strategy: 4 ways to close the gap</h3><div class="sub">Suggested monthly top-up calculated from your projected retirement gap. Each option shows what it could look like if you use that channel on its own.</div></div><span class="tag">Live gap analysis</span></div>
+<div class="status" id="gapStatus" style="margin-bottom:14px"><div class="status-icon" id="gapIcon">!</div><div><h3 id="gapTitle">Calculating retirement gap</h3><p id="gapText">Recommendations will update when you change your inputs.</p></div></div>
+<div class="strategy-grid">
+<div class="strategy" style="border-top:4px solid var(--blue)"><div class="strategy-top"><span class="eyebrow">STRATEGY 1</span><span class="tag">EPF</span></div><h4>Increase EPF Contribution</h4><div class="amount" id="epfTopup">RM0 / month</div><p id="epfTopupNote">Suggested additional voluntary EPF contribution, calculated from your projected retirement gap.</p></div>
+<div class="strategy" style="border-top:4px solid var(--purple)"><div class="strategy-top"><span class="eyebrow">STRATEGY 2</span><span class="tag">Corporate PRS</span></div><h4>Employer / Corporate PRS Top-up</h4><div class="amount" id="corpTopup">RM0 / month</div><p id="corpTopupNote">Suggested additional corporate PRS contribution, calculated from your projected retirement gap.</p></div>
+<div class="strategy" style="border-top:4px solid var(--yellow)"><div class="strategy-top"><span class="eyebrow">STRATEGY 3</span><span class="tag">Individual PRS</span></div><h4>Personal PRS Top-up</h4><div class="amount" id="prsTopup">RM0 / month</div><p id="prsTopupNote">Suggested additional individual PRS contribution, calculated from your projected retirement gap.</p></div>
+<div class="strategy" style="border-top:4px solid var(--green)"><div class="strategy-top"><span class="eyebrow">STRATEGY 4</span><span class="tag">Cash Investment</span></div><h4>Monthly Cash Investment</h4><div class="amount" id="cashTopup">RM0 / month</div><p id="cashTopupNote">Suggested additional monthly cash investment, calculated from your projected retirement gap.</p></div>
+</div>
+<p class="disclaimer" style="margin-top:12px">These are indicative suggestions based on your projected gap. Each amount assumes that the selected channel alone is used to close the gap. You can use the combined allocation below to spread the suggested top-up across several channels. Returns are assumptions, not guarantees.</p>
+</div>
+<div class="card"><div class="chart-head"><div><h3>How to Allocate Your Recommended Monthly Savings</h3><div class="sub">Your retirement gap is used to calculate the monthly amount. Choose how to distribute the top-up across the four channels. The combined amount appears when your allocation totals 100%.</div></div></div>
+<div class="split-grid">
+<div class="split"><label style="color:var(--blue)">EPF allocation (%)</label><input id="splitEpf" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitEpfOut">—</div></div>
+<div class="split"><label style="color:#715CD1">Corporate PRS (%)</label><input id="splitCorp" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitCorpOut">—</div></div>
+<div class="split"><label style="color:#B28712">Individual PRS (%)</label><input id="splitPrs" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitPrsOut">—</div></div>
+<div class="split"><label style="color:#168A65">Cash investment (%)</label><input id="splitCash" type="number" min="0" max="100" placeholder="e.g. 25"><div class="small" id="splitCashOut">—</div></div>
+</div>
+<div class="recommendation" style="margin-top:12px"><div class="sub">RECOMMENDED TOTAL MONTHLY SAVINGS</div><strong id="combinedTopup">—</strong><div class="hint" id="splitWarning">Enter your preferred allocation percentages. They must add up to exactly 100% to calculate the combined monthly amount.</div></div>
+</div>
+</section>
+</div>
+</main>
+<footer>Developed by Hafiz Azizan · MH Success Academy</footer>
+<script>
+const ids=['age','retire','life','salary','increment','epfBalance','epfMode','employee','employer','manualContribution','epfRate','prsBalance','prsMonthly','corpPrsMonthly','prsAnnual','prsRate','cashBalance','cashMonthly','cashRate','income','inflation','retirementRate','splitEpf','splitCorp','splitPrs','splitCash'];
+const el=id=>document.getElementById(id), num=id=>Math.max(0,Number(el(id).value)||0), has=id=>el(id).value.trim()!=='';
+const money=n=>'RM'+Math.round(n).toLocaleString('en-MY');
+let chart=null, latest={};
+function rateMonthly(annualPercent){return Math.pow(1+annualPercent/100,1/12)-1;}
+function futureValueFactor(annualPercent,months){
+ if(months<=0)return 0;
+ const r=rateMonthly(annualPercent);
+ if(Math.abs(r)<1e-12)return months;
+ // Contributions are made at the beginning of each month.
+ return (1+r)*(Math.pow(1+r,months)-1)/r;
+}
+function monthlyTopupForGap(gap,annualRate,months){
+ const factor=futureValueFactor(annualRate,months);
+ return gap>0&&factor>0?gap/factor:0;
+}
+function retirementProjection(startingFund,monthlyWithdrawal,inflationPercent,returnPercent,retireAge,lifeAge){
+ const r=rateMonthly(returnPercent), g=Math.pow(1+inflationPercent/100,1/12)-1;
+ let balance=startingFund,depletionAge=null;
+ for(let m=1;m<=(lifeAge-retireAge)*12;m++){
+   const withdrawal=monthlyWithdrawal*Math.pow(1+g,m-1);
+   balance=Math.max(0,balance*(1+r)-withdrawal);
+   if(balance<=0&&depletionAge===null)depletionAge=retireAge+Math.ceil(m/12);
+ }
+ return {balance,depletionAge};
+}
+function retirementNeed(monthlyWithdrawal,inflationPercent,returnPercent,years){
+ const r=rateMonthly(returnPercent),g=Math.pow(1+inflationPercent/100,1/12)-1;
+ let pv=0,w=monthlyWithdrawal;
+ for(let m=1;m<=years*12;m++){pv+=w/Math.pow(1+r,m);w*=1+g;}
+ return pv;
+}
+function clearOutputs(message='Enter your details to generate your retirement projection.'){
+ ['outEpf','outPrs','outCash','outTotal','intactCapital','liquidCapital','epfTopup','corpTopup','prsTopup','cashTopup','combinedTopup'].forEach(id=>el(id).textContent='—');
+ ['splitEpfOut','splitCorpOut','splitPrsOut','splitCashOut'].forEach(id=>el(id).textContent='—');
+ el('statusTitle').textContent='Waiting for your inputs';el('statusText').textContent=message;el('statusBox').classList.remove('good');el('statusIcon').textContent='i';
+ el('gapTitle').textContent='Retirement gap analysis';el('gapText').textContent='Complete the required inputs to see your four gap-closing strategies.';el('gapStatus').classList.remove('good');el('gapIcon').textContent='i';
+ latest={};
+ if(chart){chart.destroy();chart=null;}
+}
+function updateSplit(){
+ if(!latest.gapData)return;
+ const idsSplit=['splitEpf','splitCorp','splitPrs','splitCash'],keys=['epf','corp','prs','cash'],outs=['splitEpfOut','splitCorpOut','splitPrsOut','splitCashOut'];
+ const values=idsSplit.map(id=>num(id)),total=values.reduce((a,b)=>a+b,0);
+ const totalMonthly=latest.gapData.gap>0&&total===100?latest.gapData.gap/values.reduce((sum,v,i)=>sum+(v/100)*futureValueFactor(latest.gapData.rates[keys[i]],latest.gapData.months),0):0;
+ values.forEach((v,i)=>{const amount=total===100?totalMonthly*v/100:0;el(outs[i]).textContent=total===100?money(amount)+'/month':'—';});
+ el('combinedTopup').textContent=total===100?money(totalMonthly)+' / month':'—';
+ el('splitWarning').textContent=total===100?'Allocation totals 100%. This is the combined monthly amount needed to close your projected retirement gap, using each channel’s own pre-retirement return assumption.':`Your allocation currently totals ${total}%. Adjust the four percentages so they add up to exactly 100%.`;
+}
+function calc(){
+ const required=['age','life','income','inflation','epfRate','prsRate','cashRate','retirementRate'];
+ const contributionInputs=el('epfMode').value==='auto'?['salary','employee','employer']:['manualContribution'];
+ if([...required,...contributionInputs].some(id=>!has(id))){clearOutputs('Please complete the required profile and return assumptions. Also enter your salary and EPF contribution rates (Automatic mode), or your combined monthly EPF contribution (Manual mode). Grey examples are guides only.');return;}
+ const age=num('age'),retire=num('retire'),life=num('life'),years=retire-age,months=years*12;
+ if(age<18||retire<=age||life<=retire||life>110){clearOutputs('Please check the ages. Retirement age must be above current age and life expectancy must be above retirement age.');return;}
+ const salary=num('salary'),increment=num('increment')/100,epfRate=num('epfRate'),prsRate=num('prsRate'),cashRate=num('cashRate'),inflation=num('inflation'),retirementRate=num('retirementRate');
+ let epf=num('epfBalance'),prs=num('prsBalance'),cash=num('cashBalance'),currentSalary=salary;
+ const labels=[],epfData=[],prsData=[],cashData=[],remainingData=[];
+ const employee=num('employee'),employer=num('employer'),manual=num('manualContribution'),mode=el('epfMode').value;
+ const individualMonthly=num('prsMonthly'),corpMonthly=num('corpPrsMonthly'),cashMonthly=num('cashMonthly'),prsAnnual=num('prsAnnual');
+ for(let y=0;y<=years;y++){
+   if(y>0){
+     for(let m=0;m<12;m++){
+       const epfContribution=mode==='auto'?(employee+employer)/100*currentSalary:manual;
+       epf=(epf+epfContribution)*(1+rateMonthly(epfRate));
+       prs=(prs+individualMonthly+corpMonthly)*(1+rateMonthly(prsRate));
+       cash=(cash+cashMonthly)*(1+rateMonthly(cashRate));
+     }
+     prs+=prsAnnual;
+     currentSalary*=1+increment;
+   }
+   labels.push(String(age+y));epfData.push(epf);prsData.push(prs);cashData.push(cash);
+ }
+ const retirementFund=epf+prs+cash;
+ const firstMonthly=num('income')*Math.pow(1+inflation/100,years);
+ const retirementResult=retirementProjection(retirementFund,firstMonthly,inflation,retirementRate,retire,life);
+ const pv=retirementNeed(firstMonthly,inflation,retirementRate,life-retire);
+ const gap=Math.max(0,pv-retirementFund);
+ const topups={epf:monthlyTopupForGap(gap,epfRate,months),corp:monthlyTopupForGap(gap,prsRate,months),prs:monthlyTopupForGap(gap,prsRate,months),cash:monthlyTopupForGap(gap,cashRate,months)};
+ latest={gapData:{gap,retirementFund,pv,months,rates:{epf:epfRate,corp:prsRate,prs:prsRate,cash:cashRate}},topups};
+ el('outEpf').textContent=money(epf);el('outPrs').textContent=money(prs);el('outCash').textContent=money(cash);el('outTotal').textContent=money(retirementFund);
+ const r=rateMonthly(retirementRate),g=Math.pow(1+inflation/100,1/12)-1;
+ const intactRequired=r>g?firstMonthly/(r-g):Infinity;
+ el('intactCapital').textContent=Number.isFinite(intactRequired)?money(intactRequired):'Not sustainable at this return';
+ el('liquidCapital').textContent=money(pv);
+ const status=el('statusBox');
+ if(gap>0){status.classList.remove('good');el('statusIcon').textContent='!';el('statusTitle').textContent='Retirement shortfall detected';}
+ else{status.classList.add('good');el('statusIcon').textContent='✓';el('statusTitle').textContent='Projected fund covers the target';}
+ const depletion=retirementResult.depletionAge?`Funds are projected to run out around age ${retirementResult.depletionAge}.`:`An estimated ${money(retirementResult.balance)} remains at age ${life}.`;
+ el('statusText').textContent=`At age ${retire}, your projected EPF, PRS and cash investments total ${money(retirementFund)}. At an assumed ${retirementRate}% annual return during retirement, the estimated Capital Liquidation requirement is ${money(pv)}. ${gap>0?'Estimated shortfall: '+money(gap)+'.':'Estimated surplus: '+money(retirementFund-pv)+'.'} ${depletion}`;
+ if(gap===0){el('gapStatus').classList.add('good');el('gapIcon').textContent='✓';el('gapTitle').textContent='No funding gap detected';el('gapText').textContent='Based on the assumptions entered, the projected fund covers the Capital Liquidation target. You can still explore additional savings to build a buffer.';}
+ else{el('gapStatus').classList.remove('good');el('gapIcon').textContent='!';el('gapTitle').textContent='Estimated retirement gap: '+money(gap);el('gapText').textContent=`You have ${years} years to retirement. The monthly amounts below are suggestions calculated from your projected gap, years to retirement and the return assumptions entered. Each option shows a standalone approach.`;}
+ el('epfTopup').textContent=money(topups.epf)+' / month';el('corpTopup').textContent=money(topups.corp)+' / month';el('prsTopup').textContent=money(topups.prs)+' / month';el('cashTopup').textContent=money(topups.cash)+' / month';
+ el('epfTopupNote').textContent=`Additional voluntary EPF contribution, using the entered ${epfRate}% pre-retirement EPF return assumption.`;
+ el('corpTopupNote').textContent=`Additional employer/corporate PRS contribution, using the entered ${prsRate}% PRS return assumption.`;
+ el('prsTopupNote').textContent=`Additional individual PRS contribution, using the entered ${prsRate}% PRS return assumption.`;
+ el('cashTopupNote').textContent=`Additional monthly cash investment, using the entered ${cashRate}% cash investment return assumption.`;
+ updateSplit();
+ const nullBefore=Array(years+1).fill(null),after=life-retire;
+ for(let y=1;y<=after;y++)labels.push(String(retire+y));
+ const epfSeries=[...epfData,...Array(after).fill(null)],prsSeries=[...prsData,...Array(after).fill(null)],cashSeries=[...cashData,...Array(after).fill(null)];
+ let balance=retirementFund,remaining=[null];const rr=rateMonthly(retirementRate),mi=Math.pow(1+inflation/100,1/12)-1;
+ for(let y=1;y<=after;y++){for(let m=0;m<12;m++){balance=Math.max(0,balance*(1+rr)-firstMonthly*Math.pow(1+mi,(y-1)*12+m));}remaining.push(balance);}
+ const remainingSeries=[...nullBefore,...remaining.slice(1)];
+ if(chart)chart.destroy();
+ chart=new Chart(el('projectionChart'),{type:'bar',data:{labels,datasets:[
+ {label:'EPF',data:epfSeries,backgroundColor:'#2586F5',stack:'accum',borderRadius:2},
+ {label:'PRS',data:prsSeries,backgroundColor:'#F5BD32',stack:'accum',borderRadius:2},
+ {label:'Cash',data:cashSeries,backgroundColor:'#25B889',stack:'accum',borderRadius:2},
+ {label:'Remaining capital',data:remainingSeries,backgroundColor:'#F07855',stack:'retire',borderRadius:2}]},
+ options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${money(c.raw||0)}`}}},scales:{x:{stacked:true,grid:{display:false},title:{display:true,text:'Age'},ticks:{maxTicksLimit:14}},y:{stacked:true,beginAtZero:true,title:{display:true,text:'Fund value (RM)'},ticks:{callback:v=>v>=1000000?'RM'+(v/1000000).toFixed(1)+'m':'RM'+Math.round(v/1000)+'k'},grid:{color:'#EDF1F5'}}}}});
+}
+el('epfMode').addEventListener('change',()=>{el('autoFields').style.display=el('epfMode').value==='auto'?'block':'none';el('manualFields').style.display=el('epfMode').value==='manual'?'block':'none';calc();});
+el('recalc').addEventListener('click',calc);
+ids.forEach(id=>el(id).addEventListener('input',()=>{if(!id.startsWith('split'))calc();}));
+['splitEpf','splitCorp','splitPrs','splitCash'].forEach(id=>el(id).addEventListener('input',updateSplit));
+el('reset').addEventListener('click',()=>{ids.forEach(id=>{if(id==='retire')el(id).value=60;else if(id==='epfMode')el(id).value='auto';else el(id).value='';});el('autoFields').style.display='block';el('manualFields').style.display='none';calc();});
+calc();
+</script>
+</body>
+</html>
